@@ -1,11 +1,10 @@
 watch_stylesheet: true
 watch_config: true
-debug: true
 update_check: true
 komorebi:
   start_command: "komorebic start --whkd"
   stop_command: "komorebic stop --whkd"
-  reload_command: "komorebic stop --whkd && komorebic start --whkd"
+  reload_command: "komorebic reload-configuration"
 bars:
   primary-bar:
     enabled: true
@@ -27,13 +26,14 @@ bars:
     window_flags:
       always_on_top: false
       windows_app_bar: true
+      auto_hide: false
     dimensions:
       width: "100%"
       height: 32
     padding:
       top: 4
       left: 4
-      bottom: 4
+      bottom: 0
       right: 4
     widgets:
       left: 
@@ -48,7 +48,7 @@ bars:
       - "grouped_widgets"
       # - "language"
       - "media"
-      - "volume"
+      # - "volume"
       - "notifications"
       - "power_menu"
 widgets:
@@ -185,13 +185,12 @@ widgets:
   traffic:
     type: "yasb.traffic.TrafficWidget"
     options:
-      label: "<div style=\"text-align:right\">{upload_speed} \u25b2</div><div style=\"text-align:right;\">{download_speed} \u25bc</div>"
+      label: "<span>\udb86\uddb3</span>{download_speed}<span class=\"tr_sep\">\ue621</span><span>\udb86\uddb2</span>{upload_speed}"
+      label_alt: "Download {download_speed} \ue621 Upload {upload_speed}"
       update_interval: 1000
-      hide_if_offline: false
       callbacks:
-        on_left: 'do_nothing'
-        on_middle: 'do_nothing'
-        on_right: 'do_nothing'
+        on_left: 'toggle_label'
+        on_right: 'exec cmd /c Taskmgr'
   systray:
     type: "yasb.systray.SystrayWidget"
     options:
@@ -226,16 +225,17 @@ widgets:
   clock:
     type: "yasb.clock.ClockWidget"
     options:
-      label: "{%H:%M:%S}"
-      label_alt: "{%A, %d %B %Y %H:%M}"
+      label: "{%a, %d %b %I:%M %p}"
+      label_alt: "{%A, %d %B %Y %I:%M:%S %p}"
       timezones: []
-      calendar: 
+      calendar:
         blur: true
         round_corners: true
         round_corners_type: "normal"
         border_color: "None"
         alignment: "center"
         direction: "down"
+        offset_top: 6
       callbacks:
         on_left: "toggle_calendar"
         on_right: "toggle_label"
@@ -250,7 +250,7 @@ widgets:
       label_zero_index: false
       hide_empty_workspaces: false
       hide_if_offline: true
-      animation: false
+      animation: true
   volume:
     type: "yasb.volume.VolumeWidget"
     options:
@@ -383,7 +383,7 @@ widgets:
         "memory",
         "cpu",
         "gpu",
-        "weather"
+        # "weather"
       ]
       container_padding:
         top: 0
