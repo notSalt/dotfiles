@@ -20,7 +20,7 @@
     "unfocused_border": "Base03",
     "bar_accent": "Base0D"
   },
-  "mouse_follows_focus": true,
+  "mouse_follows_focus": false,
   "transparency": false,
   "transparency_alpha": 220,
   "animation": {
@@ -34,7 +34,12 @@
   },
   "ignore_rules": [
     { "kind": "Exe", "id": "factorio.exe", "matching_strategy": "Equals" },
-    { "kind": "Title", "id": "Anno 1800", "matching_strategy": "Equals" }
+    { "kind": "Title", "id": "Anno 1800", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "mpv.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "League Of Legends.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "run.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "StreetFighter6.exe", "matching_strategy": "Equals" },
+    { "kind": "Exe", "id": "MonsterHunterWilds.exe", "matching_strategy": "Equals" }
   ],
   "monitors": [
     {
