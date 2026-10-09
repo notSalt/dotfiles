@@ -1,0 +1,220 @@
+; glazewm-ws.ahk  (AutoHotkey v2)
+; Komorebi-style per-monitor workspaces for GlazeWM.
+;
+;   alt+1..5        focus workspace 1-5 on the monitor you're on
+;   alt+shift+1..5  move focused window to workspace 1-5 on that monitor (and follow)
+;
+; The monitor is always the one your mouse cursor is on.
+;
+; Matches config.yaml:
+;   monitor 0 (leftmost) -> 1-5, monitor 1 -> 6-10, monitor 2 -> 11-15
+;
+; Talks to GlazeWM over its local IPC connection (ws://localhost:6123, the
+; same one YASB uses) and keeps it open, so no process is started per
+; keypress. Falls back to running glazewm.exe if the connection fails.
+;
+; Started by GlazeWM's startup_commands, stopped by its shutdown_commands
+; (runs this script with the argument "exit"). It also exits on its own
+; if GlazeWM stops running.
+
+#Requires AutoHotkey v2.0
+#SingleInstance Force
+#NoTrayIcon
+
+if (A_Args.Length && A_Args[1] = "exit")
+    ExitApp
+
+PER_MONITOR := 5
+IPC_PORT := 6123
+
+; Set to true to log every keypress decision to glazewm-ws.log (next to this script).
+DEBUG := false
+
+ws := 0
+
+DllCall("LoadLibrary", "str", "winhttp", "ptr")
+OnExit((*) => WsClose())
+
+SetTimer(() => ProcessExist("glazewm.exe") ? 0 : ExitApp(), 5000)
+
+!1:: GoTo_(1)
+!2:: GoTo_(2)
+!3:: GoTo_(3)
+!4:: GoTo_(4)
+!5:: GoTo_(5)
+!+1:: MoveTo(1)
+!+2:: MoveTo(2)
+!+3:: MoveTo(3)
+!+4:: MoveTo(4)
+!+5:: MoveTo(5)
+
+GoTo_(i) {
+    Critical   ; finish this switch before handling the next keypress
+    Glaze("focus --workspace " Target(i))
+}
+
+MoveTo(i) {
+    Critical
+    t := Target(i)
+    Glaze("move --workspace " t)
+    Glaze("focus --workspace " t)
+}
+
+; Workspace name for index i on the monitor the mouse is on.
+Target(i) {
+    global PER_MONITOR
+    t := MouseMonitorIndex() * PER_MONITOR + i
+    Log("key " i " -> workspace " t)
+    return t
+}
+
+; ---------------------------------------------------------------------------
+; GlazeWM IPC
+; ---------------------------------------------------------------------------
+
+; Run a command. Waits for GlazeWM's reply so commands apply in order.
+Glaze(cmd) {
+    if (WsRequest("command " cmd) != "")
+        return
+    ; Fallback: the CLI (slower).
+    Log("IPC unavailable, using glazewm.exe for: " cmd)
+    try RunWait('"' GlazeCli() '" command ' cmd, , "Hide")
+}
+
+; Send one message and return GlazeWM's reply. Reconnects once if needed.
+WsRequest(msg) {
+    Loop 2 {
+        if !WsConnect()
+            return ""
+        if WsSend(msg) {
+            reply := WsReceiveReply()
+            if (reply != "")
+                return reply
+        }
+        WsClose()   ; connection went bad; retry with a fresh one
+    }
+    return ""
+}
+
+WsConnect() {
+    static hSession := 0
+    global ws, IPC_PORT
+    if ws
+        return true
+    if !hSession
+        hSession := DllCall("winhttp\WinHttpOpen", "ptr", 0, "uint", 1, "ptr", 0, "ptr", 0, "uint", 0, "ptr")
+    if !hSession
+        return false
+    hConnect := DllCall("winhttp\WinHttpConnect", "ptr", hSession, "wstr", "localhost", "ushort", IPC_PORT, "uint", 0, "ptr")
+    if !hConnect
+        return false
+    hRequest := DllCall("winhttp\WinHttpOpenRequest", "ptr", hConnect, "wstr", "GET", "wstr", "/"
+        , "ptr", 0, "ptr", 0, "ptr", 0, "uint", 0, "ptr")
+    ok := hRequest
+        && DllCall("winhttp\WinHttpSetOption", "ptr", hRequest, "uint", 114, "ptr", 0, "uint", 0)  ; UPGRADE_TO_WEB_SOCKET
+        && DllCall("winhttp\WinHttpSendRequest", "ptr", hRequest, "ptr", 0, "uint", 0, "ptr", 0, "uint", 0, "uint", 0, "uptr", 0)
+        && DllCall("winhttp\WinHttpReceiveResponse", "ptr", hRequest, "ptr", 0)
+    if ok
+        ws := DllCall("winhttp\WinHttpWebSocketCompleteUpgrade", "ptr", hRequest, "uptr", 0, "ptr")
+    if hRequest
+        DllCall("winhttp\WinHttpCloseHandle", "ptr", hRequest)
+    DllCall("winhttp\WinHttpCloseHandle", "ptr", hConnect)
+    if !ws
+        Log("IPC connect failed")
+    return ws != 0
+}
+
+WsSend(msg) {
+    global ws
+    len := StrPut(msg, "UTF-8") - 1
+    buf := Buffer(len + 1)
+    StrPut(msg, buf, "UTF-8")
+    ; 2 = WINHTTP_WEB_SOCKET_UTF8_MESSAGE_BUFFER_TYPE
+    return DllCall("winhttp\WinHttpWebSocketSend", "ptr", ws, "uint", 2, "ptr", buf, "uint", len, "uint") = 0
+}
+
+; Read messages until GlazeWM's reply to our request arrives.
+WsReceiveReply() {
+    Loop 20 {
+        m := WsReceiveMessage()
+        if (m = "")
+            return ""
+        if InStr(m, '"messageType":"client_response"')
+            return m
+    }
+    return ""
+}
+
+WsReceiveMessage() {
+    global ws
+    chunk := Buffer(65536)
+    out := Buffer(0)
+    total := 0
+    Loop {
+        read := 0, type := 0
+        err := DllCall("winhttp\WinHttpWebSocketReceive", "ptr", ws, "ptr", chunk, "uint", chunk.Size
+            , "uint*", &read, "uint*", &type, "uint")
+        if (err != 0 || type = 4)   ; error or CLOSE
+            return ""
+        if read {
+            newOut := Buffer(total + read)
+            if total
+                DllCall("RtlMoveMemory", "ptr", newOut, "ptr", out, "uptr", total)
+            DllCall("RtlMoveMemory", "ptr", newOut.Ptr + total, "ptr", chunk, "uptr", read)
+            out := newOut
+            total += read
+        }
+        ; 0 = binary message, 2 = UTF-8 message (complete); 1 / 3 = fragment
+        if (type = 0 || type = 2)
+            break
+    }
+    return total ? StrGet(out, total, "UTF-8") : ""
+}
+
+WsClose() {
+    global ws
+    if ws
+        DllCall("winhttp\WinHttpCloseHandle", "ptr", ws)
+    ws := 0
+}
+
+; ---------------------------------------------------------------------------
+; Helpers
+; ---------------------------------------------------------------------------
+
+; 0-based index of the monitor under the mouse, ordered left -> right
+; like GlazeWM's bind_to_monitor.
+MouseMonitorIndex() {
+    CoordMode("Mouse", "Screen")
+    MouseGetPos(&x, &y)
+    lefts := []
+    hit := 0
+    Loop MonitorGetCount() {
+        MonitorGet(A_Index, &l, &t, &r, &b)
+        lefts.Push(l)
+        if (x >= l && x < r && y >= t && y < b)
+            hit := l
+    }
+    rank := 0
+    for l in lefts
+        if (l < hit)
+            rank++
+    return rank
+}
+
+GlazeCli() {
+    static cli := ""
+    if (cli = "") {
+        cli := "glazewm.exe"
+        if pid := ProcessExist("glazewm.exe")
+            try cli := ProcessGetPath(pid)
+    }
+    return cli
+}
+
+Log(msg) {
+    global DEBUG
+    if !DEBUG
+        return
+    try FileAppend(FormatTime(, "HH:mm:ss") "  " msg "`n", A_ScriptDir "\glazewm-ws.log")
+}
