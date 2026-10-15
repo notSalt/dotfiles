@@ -1,0 +1,7 @@
+#!/bin/sh
+# Rebuild yasb/config.yaml after `git pull` so YASB picks up shared changes.
+# Enabled by setup.ps1 (git config core.hooksPath .githooks).
+root="$(git rev-parse --show-toplevel)"
+[ -f "$root/yasb/machine.yaml" ] || { echo "dotfiles: no yasb/machine.yaml yet, skipping YASB build"; exit 0; }
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$root/build.ps1" || echo "dotfiles: build.ps1 failed, run it by hand to see why"
+exit 0

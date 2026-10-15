@@ -1,0 +1,11 @@
+# Per machine: copied from yasb/machine.example.yaml and tweaked
+yasb/machine.yaml
+
+# Generated on each machine
+yasb/config.yaml
+yasb/yasb_colors.css
+
+# Written by YASB / GlazeWM / the AHK script now that they read from the repo
+*.log
+yasb/.env
+*.backup-*

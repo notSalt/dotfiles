@@ -187,6 +187,17 @@ window_rules:
       # Only the main window, titled "<place> - Roblox Studio", stays tiled.
       - window_process: { equals: 'RobloxStudioBeta' }
         window_title: { not_regex: ' - Roblox Studio$' }
+      # Voicemeeter (all editions: voicemeeter, voicemeeterpro, voicemeeter8/8x64).
+      - window_process: { regex: '(?i)^voicemeeter' }
+
+  # Float Sitecore support pop-ups, centered at 80% height.
+  # (Edge has a hidden zero-width space before "Edge" in titles.)
+  - commands: ['set-floating', 'size --height 80% --width 80%', 'position --centered']
+    match:
+      - window_process: { equals: 'msedge' }
+        window_title: { regex: '^(Sitecore Root Causes|Users|Tasks|Time Card Activities|Knowledge|Interactions|Accounts) \| Sitecore support - Work - Microsoft' }
+    on: ['manage', 'title_change']
+    run_once: true
 
 binding_modes:
   # When enabled, the focused window can be resized via arrow keys or HJKL.
@@ -272,6 +283,8 @@ keybindings:
 
   - commands: ['shell-exec cmd']
     bindings: ['alt+enter']
+
+  # alt+b (show/hide the YASB bars) is handled by glazewm-ws.ahk.
 
   # Next/previous workspace that currently exists (non-empty or shown).
   - commands: ['focus --next-active-workspace']

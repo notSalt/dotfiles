@@ -3,6 +3,7 @@
 ;
 ;   alt+1..5        focus workspace 1-5 on the monitor you're on
 ;   alt+shift+1..5  move focused window to workspace 1-5 on that monitor (and follow)
+;   alt+b           show/hide the YASB bars
 ;
 ; The monitor is always the one your mouse cursor is on.
 ;
@@ -47,6 +48,7 @@ SetTimer(() => ProcessExist("glazewm.exe") ? 0 : ExitApp(), 5000)
 !+3:: MoveTo(3)
 !+4:: MoveTo(4)
 !+5:: MoveTo(5)
+!b:: Yasb("toggle-bar")
 
 GoTo_(i) {
     Critical   ; finish this switch before handling the next keypress
@@ -176,6 +178,25 @@ WsClose() {
     if ws
         DllCall("winhttp\WinHttpCloseHandle", "ptr", ws)
     ws := 0
+}
+
+; ---------------------------------------------------------------------------
+; YASB IPC
+; ---------------------------------------------------------------------------
+
+; Send a command (as yasbc would) to YASB's CLI pipe; it replies "ACK".
+; Falls back to running yasbc.exe if the pipe isn't available.
+Yasb(cmd) {
+    len := StrPut(cmd, "UTF-8") - 1
+    msg := Buffer(len + 1)
+    StrPut(cmd, msg, "UTF-8")
+    reply := Buffer(64)
+    read := 0
+    if DllCall("CallNamedPipeW", "wstr", "\\.\pipe\yasb_pipe_cli", "ptr", msg, "uint", len
+            , "ptr", reply, "uint", reply.Size, "uint*", &read, "uint", 1000)
+        return
+    Log("YASB pipe unavailable, using yasbc.exe for: " cmd)
+    try Run('"' A_ProgramFiles '\YASB\yasbc.exe" ' cmd, , "Hide")
 }
 
 ; ---------------------------------------------------------------------------
