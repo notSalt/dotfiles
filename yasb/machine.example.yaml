@@ -1,18 +1,5 @@
-# Per-machine YASB config.
-#
-#   copy yasb\machine.example.yaml yasb\machine.yaml
-#
-# then tweak machine.yaml for this PC. machine.yaml is git-ignored, so each
-# machine keeps its own. build.ps1 joins base.yaml + machine.yaml +
-# widgets.yaml into config.yaml.
-#
-# This example is the personal PC's layout. On the work laptop:
-#   - primary-bar screens:  - "140WQ2\n"  and  - 'OMEN 25i'
-#   - comment out libre_cpu / libre_gpu (their sensor IDs are the PC's)
-#   - home label:  <span>jokj</span>
-#
-# Widget names come from widgets.yaml (shared). Machine-only widgets go at
-# the bottom of this file, under `widgets:`.
+# Per-machine bars and widgets. Copy to machine.yaml (git-ignored) and tweak.
+# Laptop: screens "140WQ2\n" + 'OMEN 25i', no libre_cpu/libre_gpu, home label jokj.
 bars:
   primary-bar:
     enabled: true
@@ -113,7 +100,7 @@ bars:
       - line
       - control_center
 
-# Machine-only widgets. Shared ones live in widgets.yaml.
+# Machine-only widgets (must not also be in widgets.yaml)
 widgets:
   home:
     type: yasb.home.HomeWidget

@@ -647,10 +647,7 @@
     background-color: var(--border);
 }
 
-/* ============================================================
-   GlazeWM  (paste below the Komorebi section in styles.css)
-   Mirrors the Komorebi workspace look: underline = active
-   ============================================================ */
+/* GlazeWM (underline = active, like Komorebi) */
 
 /* GlazeWM Workspaces */
 .glazewm-workspaces {
@@ -694,8 +691,7 @@
     color: var(--textDark);
 }
 
-/* Active = shown on a monitor, but not the one you're focused on.
-   Subtle underline so multi-monitor setups still read clearly. */
+/* Active = visible on another monitor */
 .glazewm-workspaces .ws-btn.active_populated,
 .glazewm-workspaces .ws-btn.active_empty {
     padding: 4px 16px;
@@ -709,8 +705,7 @@
     color: var(--textDark);
 }
 
-/* Focused = the workspace you're actually in.
-   Must stay AFTER the active_* rules (YASB docs requirement). */
+/* Focused = current workspace; must stay after active_* */
 .glazewm-workspaces .ws-btn.focused_populated,
 .glazewm-workspaces .ws-btn.focused_empty {
     padding: 4px 16px;
@@ -836,7 +831,6 @@
 .dark .glazewm-binding-mode .icon.none { color: var(--accentTextDark); }
 
 /* Systray */
-/* Icon being dragged, we already apply some transparency to it so you don't need to use it */
 
 .dark .systray .unpinned-visibility-btn {
     color: var(--textDark);
@@ -950,8 +944,7 @@
     background-color: var(--accentDark);
 }
 
-/* The source class name is the same as what you see in the media widget; just replace spaces with dashes and convert it to lowercase. 
-Example: "Windows Media" becomes "windows-media" */
+/* Source class = player name, lowercase, dashes for spaces */
 .media-menu .source.aimp {
     background-color: #6f42c1;
     color: #ffffff;
@@ -1482,7 +1475,7 @@ Example: "Windows Media" becomes "windows-media" */
 }
 
 
-/* Taskbar preview popup is very limited in styling options, do not use margins/paddings here */
+/* Taskbar preview: no margins/paddings */
 .taskbar-preview {
     border-radius: var(--border-radius); 
     background-color: var(--background2); 
@@ -1837,7 +1830,7 @@ Example: "Windows Media" becomes "windows-media" */
 
 
 /* Grouper sysInfo*/
-.systeminfo-grouper .container { /* The name of the css class is the name given in the config */
+.systeminfo-grouper .container {
     background-color: transparent;
 }
 
@@ -1872,8 +1865,7 @@ Example: "Windows Media" becomes "windows-media" */
 }
 
 /* SECTIONS */
-/* Left and right padding of 12 px + 4 px margin for quick action and power plan, 
-which is 16 pixels same as the other sections. */
+/* 12px padding + 4px item margin = 16px */
 .control-center-menu .section {
     background: transparent;
     margin: 0;
@@ -2306,7 +2298,7 @@ which is 16 pixels same as the other sections. */
     background-color: var(--background2);
 }
 
-/* Context menu styles for dropdowns and menus inside the Control Center panel */
+/* Control Center dropdowns */
 .control-center-menu .context-menu {
     padding: 4px 0px;
     font-family: "Segoe UI Variable", "Segoe UI";
@@ -2410,8 +2402,7 @@ which is 16 pixels same as the other sections. */
     qproperty-alignment: 'AlignVCenter | AlignRight';
 }
 
-/* Keep the center column truly centered: left and right columns share
-   the same minimum width, so the grid stays symmetric. */
+/* Equal side widths keep the clock centered */
 .yasb-bar .container-left,
 .yasb-bar .container-right {
     min-width: 760px;

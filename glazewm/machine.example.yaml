@@ -1,0 +1,10 @@
+# Per-machine window rules, appended to base.yaml's window_rules.
+# Copy to machine.yaml (git-ignored) and keep the 2-space indent.
+#
+# Example: float an app's pop-ups at 80% size.
+#  - commands: ['set-floating', 'size --height 80% --width 80%', 'position --centered']
+#    match:
+#      - window_process: { equals: 'msedge' }
+#        window_title: { regex: '^Some Pop-up' }
+#    on: ['manage', 'title_change']
+#    run_once: true

@@ -1,7 +1,5 @@
-# Shared: top-level YASB settings.
-# build.ps1 joins base.yaml + machine.yaml + widgets.yaml into config.yaml.
+# Shared top-level settings. build.ps1 joins base + machine + widgets into config.yaml.
 # yaml-language-server: $schema=https://raw.githubusercontent.com/amnweb/yasb/main/schema.json
-# For more information, visit https://github.com/amnweb/yasb/wiki
 watch_stylesheet: true
 watch_config: true
 debug: false
