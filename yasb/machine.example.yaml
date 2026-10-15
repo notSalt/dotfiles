@@ -1,11 +1,24 @@
-# Work laptop only: bar placement and screens.
-# Assembled into config.yaml by sync.ps1. Edit this file, not the generated config.yaml.
+# Per-machine YASB config.
+#
+#   copy yasb\machine.example.yaml yasb\machine.yaml
+#
+# then tweak machine.yaml for this PC. machine.yaml is git-ignored, so each
+# machine keeps its own. build.ps1 joins base.yaml + machine.yaml +
+# widgets.yaml into config.yaml.
+#
+# This example is the personal PC's layout. On the work laptop:
+#   - primary-bar screens:  - "140WQ2\n"  and  - 'OMEN 25i'
+#   - comment out libre_cpu / libre_gpu (their sensor IDs are the PC's)
+#   - home label:  <span>jokj</span>
+#
+# Widget names come from widgets.yaml (shared). Machine-only widgets go at
+# the bottom of this file, under `widgets:`.
 bars:
   primary-bar:
     enabled: true
     screens:
-    - "140WQ2\n" # laptop panel; its EDID name ends with a newline
     - 'OMEN 25i'
+    - '24G2W1G3-'
     class_name: yasb-bar
     alignment:
       position: top
@@ -49,8 +62,8 @@ bars:
       - claude_usage
       - line
       - traffic
-      # - libre_cpu   # PC only (AMD/NVIDIA sensor IDs)
-      # - libre_gpu
+      - libre_cpu
+      - libre_gpu
       - battery
       - line
       - control_center
@@ -93,8 +106,34 @@ bars:
       - clock
       - line
       right:
-      # - libre_cpu
-      # - libre_gpu
+      - libre_cpu
+      - libre_gpu
+      - line
       - taskbar
       - line
       - control_center
+
+# Machine-only widgets. Shared ones live in widgets.yaml.
+widgets:
+  home:
+    type: yasb.home.HomeWidget
+    options:
+      direction: down
+      label: "<span>kyuro</span>"
+      menu_list:
+      - title: User Home
+        path: '~'
+      - title: Download
+        path: ~\Downloads
+      - title: Documents
+        path: ~\Documents
+      - title: Pictures
+        path: ~\Pictures
+      system_menu: true
+      power_menu: false
+      blur: true
+      round_corners: true
+      round_corners_type: normal
+      border_color: System
+      alignment: left
+      offset_left: 0

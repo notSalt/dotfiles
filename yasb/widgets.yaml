@@ -1,6 +1,7 @@
-# Shared: every widget definition except `home` (its label differs per machine).
-# Assembled into config.yaml by sync.ps1. Edit this file, not the generated config.yaml.
-widgets:
+# Shared: widget definitions used by both machines.
+# There's no `widgets:` header here on purpose: these entries continue the
+# `widgets:` section that machine.yaml opens, so keep the 2-space indent.
+# Don't define a widget here that machine.yaml also defines (duplicate key).
   clock:
     type: yasb.clock.ClockWidget
     options:
