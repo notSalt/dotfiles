@@ -471,7 +471,7 @@
       precision: 0
       history_size: 60
       sensor_id_error_label: "N/A"
-      connection_error_label: "LHM off"
+      connection_error_label: "Offline"
       server_host: "localhost"
       server_port: 8085
       callbacks:
