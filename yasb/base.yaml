@@ -1,0 +1,9 @@
+# Shared: top-level YASB settings.
+# Assembled into config.yaml by sync.ps1. Edit this file, not the generated config.yaml.
+# yaml-language-server: $schema=https://raw.githubusercontent.com/amnweb/yasb/main/schema.json
+# For more information, visit https://github.com/amnweb/yasb/wiki
+watch_stylesheet: true
+watch_config: true
+debug: false
+update_check: true
+system_colors: true

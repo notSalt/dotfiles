@@ -1,126 +1,6 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/amnweb/yasb/main/schema.json
-# For more information, visit https://github.com/amnweb/yasb/wiki
-watch_stylesheet: true
-watch_config: true
-debug: false
-update_check: true
-system_colors: true
-bars:
-  primary-bar:
-    enabled: true
-    screens:
-    - 'OMEN 25i'
-    - '24G2W1G3-'
-    class_name: yasb-bar
-    alignment:
-      position: top
-      align: center
-    animation:
-      enabled: true
-      duration: 300
-    blur_effect:
-      enabled: true
-      dark_mode: true
-      round_corners: false
-      border_color: None
-    window_flags:
-      always_on_top: false
-      windows_app_bar: true
-    dimensions:
-      width: 100%
-      height: 32
-    padding:
-      top: 0
-      left: 0
-      bottom: 0
-      right: 0
-    widgets:
-      left:
-      - home
-      - line
-      - glazewm_workspaces
-      - line
-      - taskbar
-      center:
-      - line
-      - clock
-      - line
-      right:
-      - audio_visualizer
-      - media
-      - line
-      - traffic
-      - libre_cpu
-      - libre_gpu
-      - line
-      - control_center
-  # Slimmer bar for the 1080px-wide vertical monitor
-  vertical-bar:
-    enabled: true
-    screens:
-    - '27G2G5'
-    class_name: "yasb-bar vertical-bar"
-    alignment:
-      position: top
-      align: center
-    animation:
-      enabled: true
-      duration: 300
-    blur_effect:
-      enabled: true
-      dark_mode: true
-      round_corners: false
-      border_color: None
-    window_flags:
-      always_on_top: false
-      windows_app_bar: true
-    dimensions:
-      width: 100%
-      height: 32
-    padding:
-      top: 0
-      left: 0
-      bottom: 0
-      right: 0
-    widgets:
-      left:
-      - home
-      - line
-      - glazewm_workspaces
-      - line
-      - taskbar
-      center:
-      - line
-      - clock
-      - line
-      right:
-      - libre_cpu
-      - libre_gpu
-      - line
-      - control_center
+# Shared: every widget definition except `home` (its label differs per machine).
+# Assembled into config.yaml by sync.ps1. Edit this file, not the generated config.yaml.
 widgets:
-  home:
-    type: yasb.home.HomeWidget
-    options:
-      direction: down
-      label: "<span>kyuro</span>"
-      menu_list:
-      - title: User Home
-        path: '~'
-      - title: Download
-        path: ~\Downloads
-      - title: Documents
-        path: ~\Documents
-      - title: Pictures
-        path: ~\Pictures
-      system_menu: true
-      power_menu: false
-      blur: true
-      round_corners: true
-      round_corners_type: normal
-      border_color: System
-      alignment: left
-      offset_left: 0
   clock:
     type: yasb.clock.ClockWidget
     options:
@@ -482,7 +362,7 @@ widgets:
       title_label:
         enabled: true
         show: "always"
-        min_length: 20
+        min_length: 0
         max_length: 30
       ignore_apps:
         processes: []
@@ -521,6 +401,31 @@ widgets:
         round_corners: true
         border_color: None
         blur: true
+  battery:
+    type: "yasb.battery.BatteryWidget"
+    options:
+      label: "<span>{icon}</span>{percent}%"
+      label_alt: "<span>{icon}</span>{percent}% | {time_remaining}"
+      update_interval: 5000
+      time_remaining_natural: true
+      hide_unsupported: true
+      charging_options:
+        icon_format: "{charging_icon}"
+        blink_charging_icon: true
+        blink_interval: 500
+      status_thresholds:
+        critical: 10
+        low: 25
+        medium: 75
+        high: 95
+        full: 100
+      status_icons:
+        icon_charging: ""
+        icon_critical: ""
+        icon_low: ""
+        icon_medium: ""
+        icon_high: ""
+        icon_full: ""
   memory:
     type: "yasb.memory.MemoryWidget"
     options:
@@ -758,3 +663,102 @@ widgets:
         count: 16
         size: 2
         gap: 2
+  # Reads the Claude Code OAuth token from ~/.claude/.credentials.json (no API key needed)
+  claude_usage:
+    type: "yasb.claude_usage.ClaudeUsageWidget"
+    options:
+      label: "<span>\U000F0674</span>{five_hour}%<span>{stale}</span>"
+      label_alt: "<span>\U000F0674</span>5h {five_hour}% · 7d {seven_day}%<span>{stale}</span>"
+      update_interval: 60
+      cache_ttl: 120
+      five_hour_reset_format: "relative"
+      seven_day_reset_format: "absolute"
+      tooltip: true
+      token_history:
+        enabled: true
+        default_period: "today"
+        show_graph: true
+        show_graph_grid: false
+        show_models: true
+        week_starts_on: "monday"
+      status:
+        enabled: true
+        show_in_menu: true
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "refresh"
+        on_right: "toggle_label"
+      menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "right"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+  pomodoro:
+    type: "yasb.pomodoro.PomodoroWidget"
+    options:
+      label: "<span>{icon}</span>{remaining}"
+      label_alt: "<span>{icon}</span>{session}/{total_sessions} · {remaining}"
+      work_duration: 25
+      break_duration: 5
+      long_break_duration: 15
+      long_break_interval: 4
+      auto_start_breaks: true
+      auto_start_work: false
+      sound_notification: true
+      show_notification: true
+      session_target: 0
+      hide_on_break: false
+      icons:
+        work: ""
+        break: ""
+        paused: ""
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "reset_timer"
+        on_right: "toggle_timer"
+      menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "right"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        circle_size: 160
+        circle_thickness: 8
+        circle_background_color: "#3c3c3c"
+        circle_work_progress_color: "#4cc2ff"
+        circle_break_progress_color: "#4caf50"
+  notes:
+    type: "yasb.notes.NotesWidget"
+    options:
+      label: "<span></span>{count}"
+      label_alt: "{count} notes"
+      enter_to_add_note: true
+      paste_plain_text: true
+      icons:
+        note: ""
+        delete: ""
+        copy: ""
+        float_on: ""   # OpenInNewWindow (pop out)
+        float_off: ""  # BackToWindow
+        close: ""
+      menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "right"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        show_date_time: true
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "do_nothing"
+        on_right: "toggle_label"

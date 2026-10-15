@@ -1,0 +1,101 @@
+# Personal PC only: bar placement and screens.
+# Assembled into config.yaml by sync.ps1. Edit this file, not the generated config.yaml.
+bars:
+  primary-bar:
+    enabled: true
+    screens:
+    - 'OMEN 25i'
+    - '24G2W1G3-'
+    class_name: yasb-bar
+    alignment:
+      position: top
+      align: center
+    animation:
+      enabled: true
+      duration: 300
+    blur_effect:
+      enabled: true
+      dark_mode: true
+      round_corners: false
+      border_color: None
+    window_flags:
+      always_on_top: false
+      windows_app_bar: true
+    dimensions:
+      width: 100%
+      height: 32
+    padding:
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+    widgets:
+      left:
+      - home
+      - line
+      - glazewm_workspaces
+      - line
+      - taskbar
+      center:
+      - line
+      - clock
+      - line
+      right:
+      - audio_visualizer
+      - media
+      - pomodoro
+      - notes
+      - line
+      - claude_usage
+      - line
+      - traffic
+      - libre_cpu
+      - libre_gpu
+      - battery
+      - line
+      - control_center
+  # Slimmer bar for the 1080px-wide vertical monitor
+  vertical-bar:
+    enabled: true
+    screens:
+    - '27G2G5'
+    class_name: "yasb-bar vertical-bar"
+    alignment:
+      position: top
+      align: center
+    animation:
+      enabled: true
+      duration: 300
+    blur_effect:
+      enabled: true
+      dark_mode: true
+      round_corners: false
+      border_color: None
+    window_flags:
+      always_on_top: false
+      windows_app_bar: true
+    dimensions:
+      width: 100%
+      height: 32
+    padding:
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+    widgets:
+      left:
+      - home
+      - line
+      - glazewm_workspaces
+      - line
+      center:
+      - line
+      - clock
+      - line
+      right:
+      - libre_cpu
+      - libre_gpu
+      - line
+      - taskbar
+      - line
+      - control_center

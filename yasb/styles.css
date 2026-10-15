@@ -31,7 +31,7 @@
     --redFlash: rgba(137, 137, 137, 0.9);
     --subtext: rgba(90, 90, 90, 1);
     --accentHover: var(--yasb-accent);
-    --audio: var(--yasb-accent-dark2);
+    --audio: rgba(214, 104, 52, 1);
 
     /* Translucent dark theme*/
     --backgroundDark: rgba(44, 44, 44, 0.4);
@@ -45,7 +45,7 @@
     --redFlashDark: rgba(255, 255, 255, 0.1581);
     --subtextDark: rgba(255, 255, 255, 0.786);
     --accentHoverDark: var(--yasb-accent);
-    --audioDark: rgba(150, 185, 255, 0.95);
+    --audioDark: rgba(240, 140, 80, 0.95);
 
 }
 
@@ -2603,3 +2603,240 @@ which is 16 pixels same as the other sections. */
 .dark .libre-menu .sensor-value {
     color: var(--textDark);
 }
+
+/* Battery widget */
+.battery-widget .widget-container .label {
+    padding-left: 4px;
+    padding-bottom: 2px;
+}
+.battery-widget .icon.status-critical,
+.battery-widget .label.status-critical { color: #e5484d; }
+.battery-widget .icon.status-low { color: #e8a317; }
+.battery-widget .icon.status-charging { color: #00bcd4; }
+
+/* Claude Usage widget */
+.claude-usage .icon {
+    color: #d97757;
+    padding-right: 4px;
+}
+.dark .claude-usage .icon { color: #d97757; }
+.claude-usage .label { padding-bottom: 2px; }
+.claude-usage .stale { color: #e8a317; font-size: var(--fontSize); padding-left: 4px; }
+.claude-usage .status { font-size: 8px; padding-left: 4px; }
+.claude-usage .status.none { color: #4caf50; }
+.claude-usage .status.minor { color: #e8a317; }
+.claude-usage .status.major,
+.claude-usage .status.critical { color: #e5484d; }
+
+.claude-usage-menu {
+    min-width: 320px;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--popup-radius);
+}
+.dark .claude-usage-menu {
+    background-color: var(--backgroundDark);
+    border: 1px solid var(--borderDark);
+}
+.claude-usage-menu * { color: var(--text); }
+.dark .claude-usage-menu * { color: var(--textDark); }
+.claude-usage-menu .header { padding: 12px 14px 6px 14px; }
+.claude-usage-menu .header .text { font-size: 14px; }
+.claude-usage-menu .header .refresh,
+.claude-usage-menu .header .pin-btn {
+    font-family: var(--icons-font);
+    background-color: transparent;
+    border: none;
+    border-radius: var(--border-radius2);
+    padding: 4px 6px;
+}
+.claude-usage-menu .header .refresh:hover,
+.claude-usage-menu .header .pin-btn:hover { background-color: var(--hover); }
+.dark .claude-usage-menu .header .refresh:hover,
+.dark .claude-usage-menu .header .pin-btn:hover { background-color: var(--hoverDark); }
+.claude-usage-menu .header .pinned { color: var(--accent); }
+.dark .claude-usage-menu .header .pinned { color: var(--accentDark); }
+.claude-usage-menu .status-row { padding: 0px 14px 6px 14px; }
+.claude-usage-menu .status-row .status-text { color: var(--subtext); font-size: 11px; }
+.dark .claude-usage-menu .status-row .status-text { color: var(--subtextDark); }
+.claude-usage-menu .status-row .dot.none { color: #4caf50; }
+.claude-usage-menu .status-row .dot.minor { color: #e8a317; }
+.claude-usage-menu .status-row .dot.major,
+.claude-usage-menu .status-row .dot.critical { color: #e5484d; }
+.claude-usage-menu .section {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+}
+.dark .claude-usage-menu .section { border-top: 1px solid var(--borderDark); }
+.claude-usage-menu .section .title { font-size: 12px; padding-bottom: 6px; }
+.claude-usage-menu .section .progress {
+    max-height: 6px;
+    min-height: 6px;
+    border-radius: 3px;
+    background-color: var(--mutedBG);
+}
+.dark .claude-usage-menu .section .progress { background-color: var(--mutedBGDark); }
+.claude-usage-menu .section .progress .fill { border-radius: 3px; background-color: #47aff5; }
+.claude-usage-menu .section .progress .fill.medium { background-color: #e8a317; }
+.claude-usage-menu .section .progress .fill.high { background-color: #e5484d; }
+.claude-usage-menu .section .footer .reset,
+.claude-usage-menu .section .footer .percent,
+.claude-usage-menu .section .date {
+    font-size: 11px;
+    color: var(--subtext);
+    padding-top: 4px;
+}
+.dark .claude-usage-menu .section .footer .reset,
+.dark .claude-usage-menu .section .footer .percent,
+.dark .claude-usage-menu .section .date { color: var(--subtextDark); }
+.claude-usage-menu .period-btn {
+    background-color: transparent;
+    border: none;
+    border-radius: var(--border-radius2);
+    padding: 3px 8px;
+    font-size: 11px;
+}
+.claude-usage-menu .period-btn:hover { background-color: var(--hover); }
+.dark .claude-usage-menu .period-btn:hover { background-color: var(--hoverDark); }
+.claude-usage-menu .period-btn.active { background-color: var(--accent); color: var(--accentText); }
+.dark .claude-usage-menu .period-btn.active { background-color: var(--accentDark); color: var(--accentTextDark); }
+.claude-usage-menu .token-total { font-size: 18px; padding: 6px 0px; }
+.claude-usage-menu .model-name,
+.claude-usage-menu .model-total { font-size: 11px; }
+.claude-usage-menu .progress.model-0 .fill { background-color: #d97757; }
+.claude-usage-menu .progress.model-1 .fill { background-color: #47aff5; }
+.claude-usage-menu .progress.model-2 .fill { background-color: #4caf50; }
+.claude-usage-menu .progress.model-3 .fill { background-color: #b48ead; }
+.claude-usage-menu .progress.model-4 .fill { background-color: #e8a317; }
+
+/* Pomodoro widget */
+.pomodoro-widget .label { padding-bottom: 2px; }
+.pomodoro-widget .icon { padding-right: 4px; font-size: 13px; }
+.pomodoro-widget .icon.break,
+.pomodoro-widget .label.break { color: #4caf50; }
+.pomodoro-widget .icon.paused,
+.pomodoro-widget .label.paused { color: var(--subtext); }
+.dark .pomodoro-widget .icon.paused,
+.dark .pomodoro-widget .label.paused { color: var(--subtextDark); }
+
+.pomodoro-menu {
+    min-width: 240px;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--popup-radius);
+}
+.dark .pomodoro-menu {
+    background-color: var(--backgroundDark);
+    border: 1px solid var(--borderDark);
+}
+.pomodoro-menu * { color: var(--text); }
+.dark .pomodoro-menu * { color: var(--textDark); }
+.pomodoro-menu .header { font-size: 15px; padding-top: 8px; }
+.pomodoro-menu .status { font-size: 13px; }
+.pomodoro-menu .session { font-size: 11px; color: var(--subtext); padding-bottom: 6px; }
+.dark .pomodoro-menu .session { color: var(--subtextDark); }
+.pomodoro-menu .button {
+    background-color: var(--mutedBG);
+    border: none;
+    border-radius: var(--border-radius2);
+    padding: 6px 14px;
+    margin: 4px;
+}
+.dark .pomodoro-menu .button { background-color: var(--mutedBGDark); }
+.pomodoro-menu .button:hover { background-color: var(--hover); }
+.dark .pomodoro-menu .button:hover { background-color: var(--hoverDark); }
+.pomodoro-menu .button.start { background-color: var(--accent); color: var(--accentText); }
+.dark .pomodoro-menu .button.start { background-color: var(--accentDark); color: var(--accentTextDark); }
+.pomodoro-menu .button.start:hover { background-color: var(--accentHover); }
+.dark .pomodoro-menu .button.start:hover { background-color: var(--accentHoverDark); }
+
+/* Notes widget */
+.notes-widget .icon { padding-right: 4px; font-size: 13px; }
+.notes-widget .label { padding-bottom: 2px; }
+
+.notes-menu {
+    min-width: 380px;
+    max-width: 380px;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--popup-radius);
+}
+.dark .notes-menu {
+    background-color: var(--backgroundDark);
+    border: 1px solid var(--borderDark);
+}
+.notes-menu * { color: var(--text); }
+.dark .notes-menu * { color: var(--textDark); }
+.notes-menu.floating { min-width: 640px; max-width: 640px; }
+.notes-menu .notes-header { padding: 8px 10px; }
+.notes-menu .header-title { font-size: 14px; }
+.notes-menu .float-button,
+.notes-menu .close-button,
+.notes-menu .copy-button,
+.notes-menu .delete-button,
+.notes-menu .input-copy-button {
+    font-family: var(--icons-font);
+    font-size: 13px;
+    background-color: transparent;
+    border: none;
+    border-radius: var(--border-radius2);
+    padding: 0px;
+    margin: 0px;
+    min-width: 24px;
+    max-width: 24px;
+    min-height: 24px;
+    max-height: 24px;
+}
+.notes-menu .delete-button { font-size: 12px; }
+.notes-menu .input-copy-button { margin-top: 2px; margin-right: 2px; }
+.notes-menu .float-button:hover,
+.notes-menu .close-button:hover,
+.notes-menu .copy-button:hover,
+.notes-menu .input-copy-button:hover { background-color: var(--hover); }
+.dark .notes-menu .float-button:hover,
+.dark .notes-menu .close-button:hover,
+.dark .notes-menu .copy-button:hover,
+.dark .notes-menu .input-copy-button:hover { background-color: var(--hoverDark); }
+.notes-menu .delete-button,
+.dark .notes-menu .delete-button { color: #e5484d; }
+.notes-menu .delete-button:hover { background-color: rgba(229, 72, 77, 0.15); }
+.notes-menu .scroll-area { background-color: transparent; border: none; }
+.notes-menu .note-item {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+}
+.dark .notes-menu .note-item { border-bottom: 1px solid var(--borderDark); }
+.notes-menu .note-item:hover { background-color: var(--hover); }
+.dark .notes-menu .note-item:hover { background-color: var(--hoverDark); }
+.notes-menu .note-item .title { font-size: 12px; }
+.notes-menu .note-item .date,
+.notes-menu .empty-list { font-size: 11px; color: var(--subtext); }
+.dark .notes-menu .note-item .date,
+.dark .notes-menu .empty-list { color: var(--subtextDark); }
+.notes-menu .empty-list { padding: 16px; }
+.notes-menu .note-input {
+    background-color: var(--mutedBG);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius2);
+    padding: 4px;
+    max-height: 30px;
+}
+.notes-menu.floating .note-input { max-height: 100px; }
+.dark .notes-menu .note-input {
+    background-color: var(--mutedBGDark);
+    border: 1px solid var(--borderDark);
+    color: var(--textDark);
+}
+.notes-menu .note-input:focus { border: 1px solid var(--accent); }
+.dark .notes-menu .note-input:focus { border: 1px solid var(--accentDark); }
+.notes-menu .add-button,
+.notes-menu .cancel-button {
+    border: none;
+    border-radius: var(--border-radius2);
+    padding: 5px 12px;
+    margin: 0px 4px 8px 4px;
+}
+.notes-menu .add-button { background-color: var(--accent); color: var(--accentText); }
+.dark .notes-menu .add-button { background-color: var(--accentDark); color: var(--accentTextDark); }
+.notes-menu .cancel-button { background-color: var(--mutedBG); }
+.dark .notes-menu .cancel-button { background-color: var(--mutedBGDark); }
