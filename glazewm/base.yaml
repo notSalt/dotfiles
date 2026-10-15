@@ -1,0 +1,226 @@
+# Shared GlazeWM config. build.ps1 appends machine.yaml to make config.yaml.
+general:
+  # glazewm-ws.ahk handles alt+1-5 / alt+shift+1-5 and alt+b.
+  startup_commands: ['shell-exec %userprofile%\.glzr\glazewm\glazewm-ws.ahk']
+  shutdown_commands: ['shell-exec %userprofile%\.glzr\glazewm\glazewm-ws.ahk exit']
+  config_reload_commands: []
+  focus_follows_cursor: false
+  toggle_workspace_on_refocus: false
+  cursor_jump:
+    enabled: true
+    trigger: 'monitor_focus'
+  hide_method: 'cloak'
+  show_all_in_taskbar: false
+
+gaps:
+  scale_with_dpi: true
+  inner_gap: '10px'
+  outer_gap:
+    top: '5px'
+    right: '5px'
+    bottom: '5px'
+    left: '5px'
+
+window_effects:
+  focused_window:
+    border:
+      enabled: false
+      color: '#8dbcff'
+    hide_title_bar:
+      enabled: false
+    corner_style:
+      enabled: false
+      style: 'square'
+    transparency:
+      enabled: false
+      opacity: '95%'
+  other_windows:
+    border:
+      enabled: false
+      color: '#a1a1a1'
+    hide_title_bar:
+      enabled: false
+    corner_style:
+      enabled: false
+      style: 'square'
+    transparency:
+      enabled: false
+      opacity: '0%'
+
+window_behavior:
+  initial_state: 'tiling'
+  state_defaults:
+    floating:
+      centered: true
+      shown_on_top: true
+    fullscreen:
+      maximized: false
+      shown_on_top: false
+
+# 5 workspaces per monitor (names must be unique; display_name shows 1-5).
+workspaces:
+  # Monitor 0 (left)
+  - name: '1'
+    display_name: '1'
+    bind_to_monitor: 0
+  - name: '2'
+    display_name: '2'
+    bind_to_monitor: 0
+  - name: '3'
+    display_name: '3'
+    bind_to_monitor: 0
+  - name: '4'
+    display_name: '4'
+    bind_to_monitor: 0
+  - name: '5'
+    display_name: '5'
+    bind_to_monitor: 0
+  # Monitor 1 (middle)
+  - name: '6'
+    display_name: '1'
+    bind_to_monitor: 1
+  - name: '7'
+    display_name: '2'
+    bind_to_monitor: 1
+  - name: '8'
+    display_name: '3'
+    bind_to_monitor: 1
+  - name: '9'
+    display_name: '4'
+    bind_to_monitor: 1
+  - name: '10'
+    display_name: '5'
+    bind_to_monitor: 1
+  # Monitor 2 (right)
+  - name: '11'
+    display_name: '1'
+    bind_to_monitor: 2
+  - name: '12'
+    display_name: '2'
+    bind_to_monitor: 2
+  - name: '13'
+    display_name: '3'
+    bind_to_monitor: 2
+  - name: '14'
+    display_name: '4'
+    bind_to_monitor: 2
+  - name: '15'
+    display_name: '5'
+    bind_to_monitor: 2
+
+binding_modes:
+  - name: 'resize'
+    keybindings:
+      - commands: ['resize --width -2%']
+        bindings: ['h', 'left']
+      - commands: ['resize --width +2%']
+        bindings: ['l', 'right']
+      - commands: ['resize --height +2%']
+        bindings: ['k', 'up']
+      - commands: ['resize --height -2%']
+        bindings: ['j', 'down']
+      - commands: ['wm-disable-binding-mode --name resize']
+        bindings: ['escape', 'enter']
+
+keybindings:
+  # Focus
+  - commands: ['focus --direction left']
+    bindings: ['alt+h', 'alt+left']
+  - commands: ['focus --direction right']
+    bindings: ['alt+l', 'alt+right']
+  - commands: ['focus --direction up']
+    bindings: ['alt+k', 'alt+up']
+  - commands: ['focus --direction down']
+    bindings: ['alt+j', 'alt+down']
+
+  # Move
+  - commands: ['move --direction left']
+    bindings: ['alt+shift+h', 'alt+shift+left']
+  - commands: ['move --direction right']
+    bindings: ['alt+shift+l', 'alt+shift+right']
+  - commands: ['move --direction up']
+    bindings: ['alt+shift+k', 'alt+shift+up']
+  - commands: ['move --direction down']
+    bindings: ['alt+shift+j', 'alt+shift+down']
+
+  # Resize
+  - commands: ['resize --width -2%']
+    bindings: ['alt+u']
+  - commands: ['resize --width +2%']
+    bindings: ['alt+p']
+  - commands: ['resize --height +2%']
+    bindings: ['alt+o']
+  - commands: ['resize --height -2%']
+    bindings: ['alt+i']
+  - commands: ['wm-enable-binding-mode --name resize']
+    bindings: ['alt+r']
+
+  # Window / WM
+  - commands: ['wm-toggle-pause']
+    bindings: ['alt+shift+p']
+  - commands: ['toggle-tiling-direction']
+    bindings: ['alt+v']
+  - commands: ['wm-cycle-focus']
+    bindings: ['alt+space']
+  - commands: ['toggle-floating --centered']
+    bindings: ['alt+shift+space']
+  - commands: ['toggle-tiling']
+    bindings: ['alt+t']
+  - commands: ['toggle-fullscreen']
+    bindings: ['alt+f']
+  - commands: ['toggle-minimized']
+    bindings: ['alt+m']
+  - commands: ['close']
+    bindings: ['alt+shift+q']
+  - commands: ['wm-exit']
+    bindings: ['alt+shift+e']
+  - commands: ['wm-reload-config']
+    bindings: ['alt+shift+r']
+  - commands: ['wm-redraw']
+    bindings: ['alt+shift+w']
+  - commands: ['shell-exec cmd']
+    bindings: ['alt+enter']
+
+  # Workspaces
+  - commands: ['focus --next-active-workspace']
+    bindings: ['alt+s']
+  - commands: ['focus --prev-active-workspace']
+    bindings: ['alt+a']
+  - commands: ['focus --recent-workspace']
+    bindings: ['alt+d']
+  - commands: ['move-workspace --direction left']
+    bindings: ['alt+shift+a']
+  - commands: ['move-workspace --direction right']
+    bindings: ['alt+shift+f']
+  - commands: ['move-workspace --direction up']
+    bindings: ['alt+shift+d']
+  - commands: ['move-workspace --direction down']
+    bindings: ['alt+shift+s']
+
+# Must stay last: machine.yaml appends its own rules to this list.
+window_rules:
+  - commands: ['ignore']
+    match:
+      - window_process: { equals: 'zebar' }
+      # Browser picture-in-picture
+      - window_title: { regex: '[Pp]icture.in.[Pp]icture' }
+        window_class: { regex: 'Chrome_WidgetWin_1|MozillaDialogClass' }
+      - window_process: { equals: 'PowerToys' }
+        window_class: { regex: 'HwndWrapper\[PowerToys\.PowerAccent.*?\]' }
+      - window_title: { equals: 'Command Palette' }
+        window_class: { equals: 'WinUIDesktopWin32WindowClass' }
+      - window_process: { equals: 'PowerToys' }
+        window_title: { regex: '.*? - Peek' }
+      - window_process: { equals: 'PowerToys.AdvancedPaste' }
+      - window_process: { equals: 'Lively' }
+        window_class: { regex: 'HwndWrapper' }
+      - window_process: { equals: 'EXCEL' }
+        window_class: { not_regex: 'XLMAIN' }
+      - window_process: { equals: 'WINWORD' }
+        window_class: { not_regex: 'OpusApp' }
+      - window_process: { equals: 'POWERPNT' }
+        window_class: { not_regex: 'PPTFrameClass' }
+      # Roblox Studio pop-outs (only the main window tiles)
+      - window_process: { equals: 'RobloxStudioBeta' }
+        window_title: { not_regex: ' - Roblox Studio$' }
+      - window_process: { regex: '(?i)^voicemeeter' }

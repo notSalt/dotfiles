@@ -1,7 +1,4 @@
-# Shared: widget definitions used by both machines.
-# There's no `widgets:` header here on purpose: these entries continue the
-# `widgets:` section that machine.yaml opens, so keep the 2-space indent.
-# Don't define a widget here that machine.yaml also defines (duplicate key).
+# Shared widgets. No `widgets:` header: these continue the one in machine.yaml.
   clock:
     type: yasb.clock.ClockWidget
     options:
@@ -26,11 +23,11 @@
       label_alt: "{level}"
       tooltip: true
       icons:
-        "muted": "\uf026" # Icon for muted
-        "10": "\uf026"  # Icon for 0-10% volume
-        "30": "\uf026"  # Icon for 11-30% volume
-        "60": "\uf026"  # Icon for 31-60% volume
-        "100": "\uf026" # Icon for 61-100% volume
+        "muted": "\uf026"
+        "10": "\uf026"
+        "30": "\uf026"
+        "60": "\uf026"
+        "100": "\uf026"
       callbacks:
         on_left: toggle_volume_menu
         on_right: toggle_mute
@@ -195,9 +192,9 @@
       class_name: "systray"
       label_collapsed: "\udb80\udd43"
       label_expanded: "\udb80\udd40"
-      label_position: "left" # Can be "left" or "right"
-      icon_size: 16 # Can be any integer between 8 and 64
-      pin_click_modifier: "alt" # Can be "ctrl", "alt" or "shift"
+      label_position: "left"
+      icon_size: 16
+      pin_click_modifier: "alt"
       show_unpinned: false
       show_unpinned_button: true
       show_battery: false
@@ -206,7 +203,7 @@
       use_hook: true
       icons_per_row: 3
       show_network: false
-      hide_icons: [] # Optional, list of process names to hide (e.g. ["discord"])
+      hide_icons: []
       popup:
         blur: true
         round_corners: true
@@ -221,16 +218,15 @@
     options:
       label: "<span>\udb83\ude09</span>"
       change_automatically: false
-    # Example path to folder with images. Can be a single string or a list of strings.
       image_path: "D:\\OneDrive\\Pictures\\Wallpapers\\Themes\\Monochrome" 
       engine:
         enabled: true
-        animation: "circle" # circle/slide_top/diamond/split
+        animation: "circle"
       gallery:
         image_width: 300
         image_corner_radius: 0
-        type: "magnified" # default/magnified/strip/slide - see "Gallery types" below
-        orientation: "portrait" # landscape/portrait
+        type: "magnified"
+        orientation: "portrait"
         accent_color: "auto"
       callbacks:
         on_left: "toggle_gallery"
@@ -239,7 +235,7 @@
       keybindings:
         - keys: "ctrl+alt+w"
           action: "toggle_gallery"
-          screen: "primary" # active/cursor/primary
+          screen: "primary"
   media:
     type: "yasb.media.MediaWidget"
     options:
@@ -288,17 +284,16 @@
       scrolling_label:
         enabled: false
         update_interval_ms: 33
-        style: "left"  # can be "left", "right", "bounce", "bounce-ease"
+        style: "left"
         separator: " | "
         label_padding: 0
         always_scroll: false
-      # Easing curve params: https://www.desmos.com/calculator/j7eamemxzi
         ease_slope: 20
         ease_pos: 0.8
         ease_min: 0.5
       progress_bar:
-        enabled: false       # Whether to enable the progress bar on the widget.
-        alignment: "bottom"  # The alignment of the progress bar inside the widget container. Can be "top", "bottom", or "center".
+        enabled: false
+        alignment: "bottom"
   language:
     type: "yasb.language.LanguageWidget"
     options:
@@ -381,15 +376,15 @@
         medium: 50
         high: 90
       histogram_icons:
-        - "\u2581" # 0%
-        - "\u2581" # 10%
-        - "\u2582" # 20%
-        - "\u2583" # 30%
-        - "\u2584" # 40%
-        - "\u2585" # 50%
-        - "\u2586" # 60%
-        - "\u2587" # 70%
-        - "\u2588" # 80%+
+        - "\u2581"
+        - "\u2581"
+        - "\u2582"
+        - "\u2583"
+        - "\u2584"
+        - "\u2585"
+        - "\u2586"
+        - "\u2587"
+        - "\u2588"
       histogram_num_columns: 8
       callbacks:
         on_left: "toggle_menu"
@@ -440,15 +435,15 @@
         medium: 50
         high: 90
       histogram_icons:
-        - "\u2581" # 0%
-        - "\u2581" # 10%
-        - "\u2582" # 20%
-        - "\u2583" # 30%
-        - "\u2584" # 40%
-        - "\u2585" # 50%
-        - "\u2586" # 60%
-        - "\u2587" # 70%
-        - "\u2588" # 80%+
+        - "\u2581"
+        - "\u2581"
+        - "\u2582"
+        - "\u2583"
+        - "\u2584"
+        - "\u2585"
+        - "\u2586"
+        - "\u2587"
+        - "\u2588"
       menu:
         enabled: true
         direction: "down"
@@ -458,8 +453,7 @@
         round_corners: true
         border_color: None
         blur: true
-  # Libre Hardware Monitor (needs LHM running with Options > Remote Web Server > Run)
-  # Sensor IDs: http://localhost:8085/data.json
+  # Needs Libre Hardware Monitor's web server (sensor IDs: localhost:8085/data.json)
   libre_cpu:
     type: "yasb.libre_monitor.LibreHardwareMonitorWidget"
     options:
@@ -664,7 +658,6 @@
         count: 16
         size: 2
         gap: 2
-  # Reads the Claude Code OAuth token from ~/.claude/.credentials.json (no API key needed)
   claude_usage:
     type: "yasb.claude_usage.ClaudeUsageWidget"
     options:

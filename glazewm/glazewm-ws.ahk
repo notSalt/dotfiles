@@ -1,22 +1,9 @@
-; glazewm-ws.ahk  (AutoHotkey v2)
-; Komorebi-style per-monitor workspaces for GlazeWM.
-;
-;   alt+1..5        focus workspace 1-5 on the monitor you're on
-;   alt+shift+1..5  move focused window to workspace 1-5 on that monitor (and follow)
+; glazewm-ws.ahk (AutoHotkey v2): per-monitor workspaces for GlazeWM.
+;   alt+1..5        focus workspace 1-5 on the monitor under the mouse
+;   alt+shift+1..5  move the focused window there (and follow)
 ;   alt+b           show/hide the YASB bars
-;
-; The monitor is always the one your mouse cursor is on.
-;
-; Matches config.yaml:
-;   monitor 0 (leftmost) -> 1-5, monitor 1 -> 6-10, monitor 2 -> 11-15
-;
-; Talks to GlazeWM over its local IPC connection (ws://localhost:6123, the
-; same one YASB uses) and keeps it open, so no process is started per
-; keypress. Falls back to running glazewm.exe if the connection fails.
-;
-; Started by GlazeWM's startup_commands, stopped by its shutdown_commands
-; (runs this script with the argument "exit"). It also exits on its own
-; if GlazeWM stops running.
+; Monitor n (left to right) owns workspaces n*5+1 .. n*5+5, matching config.yaml.
+; Started/stopped by GlazeWM; exits by itself if GlazeWM stops.
 
 #Requires AutoHotkey v2.0
 #SingleInstance Force
@@ -28,7 +15,7 @@ if (A_Args.Length && A_Args[1] = "exit")
 PER_MONITOR := 5
 IPC_PORT := 6123
 
-; Set to true to log every keypress decision to glazewm-ws.log (next to this script).
+; true = log to glazewm-ws.log
 DEBUG := false
 
 ws := 0
@@ -70,20 +57,17 @@ Target(i) {
     return t
 }
 
-; ---------------------------------------------------------------------------
-; GlazeWM IPC
-; ---------------------------------------------------------------------------
+; --- GlazeWM IPC ---
 
-; Run a command. Waits for GlazeWM's reply so commands apply in order.
+; Run a GlazeWM command over IPC, falling back to the CLI.
 Glaze(cmd) {
     if (WsRequest("command " cmd) != "")
         return
-    ; Fallback: the CLI (slower).
     Log("IPC unavailable, using glazewm.exe for: " cmd)
     try RunWait('"' GlazeCli() '" command ' cmd, , "Hide")
 }
 
-; Send one message and return GlazeWM's reply. Reconnects once if needed.
+; Send one message and return the reply (reconnects once).
 WsRequest(msg) {
     Loop 2 {
         if !WsConnect()
@@ -135,7 +119,6 @@ WsSend(msg) {
     return DllCall("winhttp\WinHttpWebSocketSend", "ptr", ws, "uint", 2, "ptr", buf, "uint", len, "uint") = 0
 }
 
-; Read messages until GlazeWM's reply to our request arrives.
 WsReceiveReply() {
     Loop 20 {
         m := WsReceiveMessage()
@@ -180,12 +163,9 @@ WsClose() {
     ws := 0
 }
 
-; ---------------------------------------------------------------------------
-; YASB IPC
-; ---------------------------------------------------------------------------
+; --- YASB IPC ---
 
-; Send a command (as yasbc would) to YASB's CLI pipe; it replies "ACK".
-; Falls back to running yasbc.exe if the pipe isn't available.
+; Send a yasbc command over YASB's pipe, falling back to yasbc.exe.
 Yasb(cmd) {
     len := StrPut(cmd, "UTF-8") - 1
     msg := Buffer(len + 1)
@@ -199,12 +179,9 @@ Yasb(cmd) {
     try Run('"' A_ProgramFiles '\YASB\yasbc.exe" ' cmd, , "Hide")
 }
 
-; ---------------------------------------------------------------------------
-; Helpers
-; ---------------------------------------------------------------------------
+; --- Helpers ---
 
-; 0-based index of the monitor under the mouse, ordered left -> right
-; like GlazeWM's bind_to_monitor.
+; 0-based index of the monitor under the mouse, left to right.
 MouseMonitorIndex() {
     CoordMode("Mouse", "Screen")
     MouseGetPos(&x, &y)

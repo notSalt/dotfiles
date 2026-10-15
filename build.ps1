@@ -1,38 +1,27 @@
-<#
-.SYNOPSIS
-    Builds yasb/config.yaml from the shared and per-machine pieces.
-
-.DESCRIPTION
-    YASB only reads a single config.yaml, so it's assembled from:
-
-        yasb/base.yaml      shared    top-level settings
-        yasb/machine.yaml   per-PC    bars + machine-only widgets (git-ignored)
-        yasb/widgets.yaml   shared    widget definitions
-
-    The output is written next to them in yasb/, which is where YASB reads
-    from once setup.ps1 has run. YASB reloads by itself when it changes.
-
-    The pieces are joined byte for byte so Nerd Font glyphs survive.
-
-    Runs automatically after `git pull` (see .githooks/). Run it by hand after
-    editing machine.yaml.
-#>
+# Builds yasb/config.yaml and glazewm/config.yaml from shared + per-machine pieces.
+# Runs after every `git pull` (see .githooks); run it by hand after editing a machine.yaml.
 $ErrorActionPreference = 'Stop'
+
+# Joins files byte for byte (keeps Nerd Font glyphs intact).
+function Join-Pieces([string]$dir, [string[]]$names) {
+    $out = New-Object System.Collections.Generic.List[byte]
+    foreach ($name in $names) {
+        $path = Join-Path $dir $name
+        if (-not (Test-Path $path)) { continue }
+        $bytes = [System.IO.File]::ReadAllBytes($path)
+        $out.AddRange($bytes)
+        if ($bytes.Length -gt 0 -and $bytes[-1] -ne 10) { $out.Add(10) }
+    }
+    $target = Join-Path $dir 'config.yaml'
+    [System.IO.File]::WriteAllBytes($target, $out.ToArray())
+    Write-Host "Built $target"
+}
+
 $yasb = Join-Path $PSScriptRoot 'yasb'
-$machine = Join-Path $yasb 'machine.yaml'
-
-if (-not (Test-Path $machine)) {
-    throw "yasb\machine.yaml not found. Copy yasb\machine.example.yaml to yasb\machine.yaml, tweak it for this PC, then run build.ps1 again."
+if (-not (Test-Path (Join-Path $yasb 'machine.yaml'))) {
+    throw "Missing yasb\machine.yaml. Copy it from yasb\machine.example.yaml and tweak it first."
 }
+Join-Pieces $yasb 'base.yaml', 'machine.yaml', 'widgets.yaml'
 
-$out = New-Object System.Collections.Generic.List[byte]
-foreach ($name in 'base.yaml', 'machine.yaml', 'widgets.yaml') {
-    $bytes = [System.IO.File]::ReadAllBytes((Join-Path $yasb $name))
-    $out.AddRange($bytes)
-    # Keep the last line of one piece from running into the next.
-    if ($bytes.Length -gt 0 -and $bytes[-1] -ne 10) { $out.Add(10) }
-}
-
-$target = Join-Path $yasb 'config.yaml'
-[System.IO.File]::WriteAllBytes($target, $out.ToArray())
-Write-Host "Built $target"
+# glazewm/machine.yaml is optional.
+Join-Pieces (Join-Path $PSScriptRoot 'glazewm') 'base.yaml', 'machine.yaml'
