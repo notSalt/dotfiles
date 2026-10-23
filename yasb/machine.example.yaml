@@ -1,5 +1,5 @@
 # Per-machine bars and widgets. Copy to machine.yaml (git-ignored) and tweak.
-# Laptop: screens "140WQ2\n" + 'OMEN 25i', no libre_cpu/libre_gpu, home label jokj.
+# Laptop: no libre_cpu/libre_gpu, home label jokj.
 bars:
   primary-bar:
     enabled: true
@@ -44,7 +44,6 @@ bars:
       - audio_visualizer
       - media
       - pomodoro
-      - notes
       - line
       - claude_usage
       - line
@@ -98,6 +97,47 @@ bars:
       - line
       - taskbar
       - line
+      - control_center
+  # Any monitor not named above (e.g. other displays); no right-side info
+  external-bar:
+    enabled: true
+    screens:
+    - '*'
+    class_name: yasb-bar
+    alignment:
+      position: top
+      align: center
+    animation:
+      enabled: true
+      duration: 300
+    blur_effect:
+      enabled: true
+      dark_mode: true
+      round_corners: false
+      border_color: None
+    window_flags:
+      always_on_top: false
+      windows_app_bar: true
+    dimensions:
+      width: 100%
+      height: 32
+    padding:
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+    widgets:
+      left:
+      - home
+      - line
+      - glazewm_workspaces
+      - line
+      - taskbar
+      center:
+      - line
+      - clock
+      - line
+      right: 
       - control_center
 
 # Machine-only widgets (must not also be in widgets.yaml)
