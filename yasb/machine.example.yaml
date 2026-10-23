@@ -43,7 +43,7 @@ bars:
       right:
       - audio_visualizer
       - media
-      - pomodoro
+      - pomodoro\
       - line
       - claude_usage
       - line
